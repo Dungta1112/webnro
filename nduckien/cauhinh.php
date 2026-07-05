@@ -89,7 +89,7 @@ function nduckien_time($datetime, $full = false) {
 function deletePostAndComments($conn, $post_id)
 {
     $delete_comments_query = "DELETE FROM comments WHERE post_id = ?";
-    $delete_posts_query = "DELETE FROM posts WHERE id = ?";
+    $delete_posts_query = "DELETE FROM baiviet WHERE id = ?";
 
     $delete_comments_stmt = $conn->prepare($delete_comments_query);
     $delete_comments_stmt->bindParam(1, $post_id, PDO::PARAM_INT);
@@ -103,7 +103,10 @@ function deletePostAndComments($conn, $post_id)
 
 function updatePostStatus($conn, $post_id, $column, $value)
 {
-    $update_query = "UPDATE posts SET $column = ? WHERE id = ?";
+    if ($column == 'ghimbai') $column = 'top_baiviet';
+    if ($column == 'trangthai' || $column == 'tinhtrang') $column = 'new';
+    
+    $update_query = "UPDATE baiviet SET $column = ? WHERE id = ?";
     $update_stmt = $conn->prepare($update_query);
     $update_stmt->bindParam(1, $value, PDO::PARAM_INT);
     $update_stmt->bindParam(2, $post_id, PDO::PARAM_INT);

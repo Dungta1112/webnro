@@ -20,7 +20,7 @@ if ($_login === null) {
 
             // Thực hiện truy vấn cập nhật "tinhtrang" của bài viết
             try {
-                $query = "UPDATE posts SET tinhtrang = :tinhtrang WHERE id = :post_id";
+                $query = "UPDATE baiviet SET new = :tinhtrang WHERE id = :post_id";
                 $stmt = $conn->prepare($query);
                 $stmt->bindParam(":tinhtrang", $tinhtrang, PDO::PARAM_INT);
                 $stmt->bindParam(":post_id", $post_id, PDO::PARAM_INT);

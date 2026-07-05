@@ -40,12 +40,12 @@ require_once 'nduckien/head.php';
 
             </div>
             <?php
-            $query = "SELECT posts.*, player.gender AS Gender, MAX(account.is_admin) AS admin, COUNT(comments.id) AS comment_count FROM posts
-        LEFT JOIN `player` ON posts.username = `player`.name COLLATE utf8mb4_general_ci
-        LEFT JOIN account ON `player`.account_id = account.id
-        LEFT JOIN comments ON posts.id = comments.post_id
-        WHERE posts.username = `player`.name COLLATE utf8mb4_general_ci AND posts.ghimbai = 1 AND account.is_admin = 1
-            GROUP BY posts.id, posts.tieude, posts.tinhtrang, posts.username, player.gender ORDER BY posts.id DESC;";
+            $query = "SELECT baiviet.id, baiviet.tieude, baiviet.new AS tinhtrang, player.gender AS Gender, MAX(account.is_admin) AS admin, player.name AS username, COUNT(comments.id) AS comment_count FROM baiviet
+        LEFT JOIN account ON baiviet.account_id = account.id
+        LEFT JOIN `player` ON account.id = player.account_id
+        LEFT JOIN comments ON baiviet.id = comments.post_id
+        WHERE baiviet.top_baiviet > 0 AND account.is_admin = 1
+            GROUP BY baiviet.id, baiviet.tieude, baiviet.new, player.name, player.gender ORDER BY baiviet.id DESC;";
 
 
             $stmt = $conn->prepare($query);
@@ -83,7 +83,7 @@ require_once 'nduckien/head.php';
         <div class="col">
             <?php
             // Tính toán số lượng bài viết
-            $query_count = "SELECT COUNT(*) AS count FROM posts";
+            $query_count = "SELECT COUNT(*) AS count FROM baiviet";
             $result_count = $conn->query($query_count);
             $row_count = $result_count->fetch(PDO::FETCH_ASSOC);
             $count = $row_count['count'];
@@ -102,11 +102,10 @@ require_once 'nduckien/head.php';
 
             // Tính toán giới hạn kết quả truy vấn theo biến $limit và $page
             $offset = ($page - 1) * $limit;
-            $query = "SELECT posts.*, player.gender AS Gender, account.is_admin AS admin FROM posts
-      LEFT JOIN `player` ON posts.username = `player`.name COLLATE utf8mb4_general_ci
-      LEFT JOIN account ON `player`.account_id = account.id
-      WHERE posts.username = `player`.name COLLATE utf8mb4_general_ci
-      ORDER BY posts.id DESC LIMIT :limit OFFSET :offset";
+            $query = "SELECT baiviet.id, baiviet.tieude, baiviet.time AS created_at, baiviet.new AS tinhtrang, player.gender AS Gender, account.is_admin AS admin, player.name AS username FROM baiviet
+        LEFT JOIN account ON baiviet.account_id = account.id
+        LEFT JOIN `player` ON account.id = player.account_id
+        WHERE baiviet.top_baiviet = 0 ORDER BY baiviet.id DESC LIMIT :limit OFFSET :offset;";
 
             $stmt = $conn->prepare($query);
             $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);

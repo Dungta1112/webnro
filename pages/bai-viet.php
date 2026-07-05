@@ -44,10 +44,10 @@ if (isset($_GET['id'])) {
                                         <div style="font-size: 9px; padding-top: 5px">
                                             <?php
                                             // Xử lý lấy thông tin bài viết từ CSDL
-                                            $query = "SELECT posts.*, player.gender AS Gender, 0 AS tichdiem, account.is_admin AS admin, posts.image, posts.tinhtrang FROM posts
-                                    LEFT JOIN `player` ON posts.username = `player`.name COLLATE utf8mb4_general_ci
-                                    LEFT JOIN account ON `player`.account_id = account.id
-                                    WHERE posts.id = :post_id";
+                                            $query = "SELECT baiviet.id, baiviet.tieude, baiviet.noidung, baiviet.time AS created_at, baiviet.new AS tinhtrang, player.gender AS Gender, 0 AS tichdiem, account.is_admin AS admin, player.name AS username, '' AS image FROM baiviet
+                                    LEFT JOIN account ON baiviet.account_id = account.id
+                                    LEFT JOIN `player` ON account.id = player.account_id
+                                    WHERE baiviet.id = :post_id";
 
                                             $stmt = $conn->prepare($query);
                                             $stmt->bindParam(":post_id", $_postsid, PDO::PARAM_INT);
@@ -254,7 +254,7 @@ if (isset($_GET['id'])) {
                                                     echo '<img alt="<?php echo $_tenmaychu; ?>"  src="' . $avatar_url . '" alt="Avatar" style="width: 30px">';
                                                     echo '<p>';
 
-                                                    $query = "SELECT DISTINCT posts.*, account.is_admin AS admin, `player`.id FROM posts LEFT JOIN `player` ON posts.username = `player`.name COLLATE utf8mb4_general_ci LEFT JOIN account ON `player`.account_id = account.id WHERE posts.username = ? ORDER BY posts.id DESC";
+                                                    $query = "SELECT DISTINCT baiviet.id, baiviet.tieude, baiviet.noidung, baiviet.time AS created_at, baiviet.new AS tinhtrang, account.is_admin AS admin, `player`.id FROM baiviet LEFT JOIN account ON baiviet.account_id = account.id LEFT JOIN `player` ON account.id = player.account_id WHERE player.name = ? ORDER BY baiviet.id DESC";
                                                     $stmt = $conn->prepare($query);
                                                     $stmt->bindParam(1, $nguoidung, PDO::PARAM_STR);
                                                     $stmt->execute();

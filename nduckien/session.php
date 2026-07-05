@@ -8,6 +8,20 @@ if (session_status() == PHP_SESSION_NONE) {
 require_once 'connect.php';
 date_default_timezone_set('Asia/Ho_Chi_Minh');
 
+try {
+    $conn->exec("CREATE TABLE IF NOT EXISTS `comments` (
+      `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+      `post_id` int(11) NOT NULL,
+      `nguoidung` varchar(255) NOT NULL,
+      `traloi` text NOT NULL,
+      `gender` int(11) DEFAULT NULL,
+      `image` varchar(500) DEFAULT NULL,
+      `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;");
+} catch (PDOException $e) {}
+
+
 function fetchUserData($conn, $username)
 {
     $stmt = $conn->prepare("SELECT * FROM account WHERE username = :username");
@@ -71,7 +85,7 @@ $id_post = $_GET["id"] ?? null;
 
 function fetchPosts($conn, $id_post)
 {
-    $stmt = $conn->prepare("SELECT * FROM posts WHERE id = :id");
+    $stmt = $conn->prepare("SELECT baiviet.*, player.name AS username FROM baiviet LEFT JOIN account ON baiviet.account_id = account.id LEFT JOIN player ON account.id = player.account_id WHERE baiviet.id = :id");
     $stmt->bindParam(":id", $id_post);
     $stmt->execute();
     $posts_protect = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -89,11 +103,11 @@ function fetchPosts($conn, $id_post)
         "_noidung" => $posts_protect['noidung'],
         "_tieude" => $posts_protect['tieude'],
         "_userposts" => $posts_protect['username'],
-        "_theloai" => $posts_protect['theloai'],
-        "_ghimbai" => $posts_protect['ghimbai'],
-        "_trangthai" => $posts_protect['trangthai'],
-        "_tinhtrang" => $posts_protect['tinhtrang'],
-        "_imagepost" => $posts_protect['image'],
+        "_theloai" => 0,
+        "_ghimbai" => $posts_protect['top_baiviet'],
+        "_trangthai" => $posts_protect['new'],
+        "_tinhtrang" => $posts_protect['new'],
+        "_imagepost" => '',
     ];
 }
 

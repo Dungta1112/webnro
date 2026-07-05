@@ -69,12 +69,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if (!isset($response['type'])) {
             // Thêm bài viết vào cơ sở dữ liệu
-            $sql = "INSERT INTO posts (tieude, noidung, username, image) VALUES (:tieude, :noidung, :username, :image)";
+            $sql = "INSERT INTO baiviet (tieude, noidung, account_id, new, top_baiviet) VALUES (:tieude, :noidung, :account_id, '0', 0)";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':tieude', $tieude, PDO::PARAM_STR);
             $stmt->bindParam(':noidung', $noidung, PDO::PARAM_STR);
-            $stmt->bindParam(':username', $_name, PDO::PARAM_STR);
-            $stmt->bindParam(':image', $imageName, PDO::PARAM_STR);
+            $stmt->bindParam(':account_id', $_id, PDO::PARAM_STR);
 
             if ($_status === 0) {
                 $response['type'] = 'info';
