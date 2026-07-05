@@ -1,9 +1,9 @@
 <?php
 $databaseConfig = [
   'ip' => "localhost",
-  'dbname' => "piavnnet_test",
-  'user' => "piavnnet_test",
-  'pass' => "Zj&iBs_+6[lz"
+  'dbname' => "nro",
+  'user' => "root",
+  'pass' => ""
 ];
 
 // Set time zone
