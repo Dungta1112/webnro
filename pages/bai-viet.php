@@ -44,9 +44,9 @@ if (isset($_GET['id'])) {
                                         <div style="font-size: 9px; padding-top: 5px">
                                             <?php
                                             // Xử lý lấy thông tin bài viết từ CSDL
-                                            $query = "SELECT posts.*, JSON_EXTRACT(`character`.infoChar, '$.Gender') AS Gender, 0 AS tichdiem, account.is_admin AS admin, posts.image, posts.tinhtrang FROM posts
-                                    LEFT JOIN `character` ON posts.username = `character`.Name COLLATE utf8mb4_general_ci
-                                    LEFT JOIN account ON `character`.account_id = account.id
+                                            $query = "SELECT posts.*, player.gender AS Gender, 0 AS tichdiem, account.is_admin AS admin, posts.image, posts.tinhtrang FROM posts
+                                    LEFT JOIN `player` ON posts.username = `player`.name COLLATE utf8mb4_general_ci
+                                    LEFT JOIN account ON `player`.account_id = account.id
                                     WHERE posts.id = :post_id";
 
                                             $stmt = $conn->prepare($query);
@@ -237,7 +237,7 @@ if (isset($_GET['id'])) {
                                                 $nguoidung = $comment['nguoidung'];
 
                                                 // Lấy thông tin tài khoản và điểm tích lũy
-                                                $sql = "SELECT 0 AS tichdiem, account.is_admin AS admin, `character`.id FROM account INNER JOIN `character` ON `character`.account_id = account.id WHERE `character`.Name COLLATE utf8mb4_general_ci = ?";
+                                                $sql = "SELECT 0 AS tichdiem, account.is_admin AS admin, `player`.id FROM account INNER JOIN `player` ON `player`.account_id = account.id WHERE `player`.name COLLATE utf8mb4_general_ci = ?";
                                                 $stmt = $conn->prepare($sql);
                                                 $stmt->bindParam(1, $nguoidung, PDO::PARAM_STR);
                                                 $stmt->execute();
@@ -254,7 +254,7 @@ if (isset($_GET['id'])) {
                                                     echo '<img alt="<?php echo $_tenmaychu; ?>"  src="' . $avatar_url . '" alt="Avatar" style="width: 30px">';
                                                     echo '<p>';
 
-                                                    $query = "SELECT DISTINCT posts.*, account.is_admin AS admin, `character`.id FROM posts LEFT JOIN `character` ON posts.username = `character`.Name COLLATE utf8mb4_general_ci LEFT JOIN account ON `character`.account_id = account.id WHERE posts.username = ? ORDER BY posts.id DESC";
+                                                    $query = "SELECT DISTINCT posts.*, account.is_admin AS admin, `player`.id FROM posts LEFT JOIN `player` ON posts.username = `player`.name COLLATE utf8mb4_general_ci LEFT JOIN account ON `player`.account_id = account.id WHERE posts.username = ? ORDER BY posts.id DESC";
                                                     $stmt = $conn->prepare($query);
                                                     $stmt->bindParam(1, $nguoidung, PDO::PARAM_STR);
                                                     $stmt->execute();

@@ -36,7 +36,7 @@ if ($_admin != 1) {
 
                 try {
                     // Check if the account exists
-                    $stmt_check = $conn->prepare("SELECT * FROM `character` WHERE Name = :username");
+                    $stmt_check = $conn->prepare("SELECT a.ban, a.id AS account_id, a.active FROM `player` p JOIN `account` a ON p.account_id = a.id WHERE p.name = :username");
                     $stmt_check->bindParam(":username", $_name);
                     $stmt_check->execute();
                     $result_check = $stmt_check->fetch();
@@ -47,9 +47,8 @@ if ($_admin != 1) {
                         if (isset($result_check["ban"]) && $result_check["ban"] == 1) {
                             $_alert = '<div class="alert alert-danger">Lỗi: Tài khoản đã bị vi phạm và không thể kích hoạt!</div>';
                         } else {
-                            // Assuming $_IsPremium is defined and holds a valid column name
-                            $stmt_update = $conn->prepare("UPDATE `character` SET infoChar = JSON_SET(infoChar, '$.IsPremium', 'true') WHERE Name = :username");
-                            $stmt_update->bindParam(":username", $_name);
+                            $stmt_update = $conn->prepare("UPDATE `account` SET active = 1 WHERE id = :account_id");
+                            $stmt_update->bindParam(":account_id", $result_check['account_id']);
                             if ($stmt_update->execute()) {
                                 if ($stmt_update->rowCount() == 1) {
                                     $_alert = '<div class="alert alert-success">Kích hoạt thành viên thành công cho tài khoản: ' . $_name . '!</div>';

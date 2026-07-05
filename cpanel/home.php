@@ -51,8 +51,8 @@ $_tongactive = $active_statement->fetchColumn();
                 <?php echo $_tongban; ?>
             </p>
             <?php
-            $sql = "SELECT c.id AS character_id, c.Name AS character_name, c.ItemBag, u.id AS user_id, u.cash AS vnd, u.vang AS coin
-        FROM `character` AS c
+            $sql = "SELECT c.id AS character_id, c.name AS character_name, c.items_bag AS ItemBag, u.id AS user_id, u.cash AS vnd, u.vang AS coin
+        FROM `player` AS c
         LEFT JOIN account AS u ON c.account_id = u.id
         WHERE u.id IS NOT NULL";
             $stmt = $conn->prepare($sql);

@@ -25,7 +25,7 @@ function loginUser($username, $password, $conn)
         if ($select !== false && $select['password'] == $password) {
             $account_id = $select['id'];
 
-            $stmt = $conn->prepare("SELECT * FROM `character` WHERE id = :account_id");
+            $stmt = $conn->prepare("SELECT * FROM `player` WHERE account_id = :account_id");
             $stmt->bindParam(':account_id', $account_id, PDO::PARAM_INT);
             $stmt->execute();
             $result = $stmt->fetch(PDO::FETCH_ASSOC);

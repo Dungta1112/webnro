@@ -48,7 +48,7 @@ function fetchUserData($conn, $username)
 
 function fetchPlayerData($conn, $_id)
 {
-    $stmt = $conn->prepare("SELECT *, JSON_EXTRACT(`character`.infoChar, '$.Gender') AS Gender, JSON_UNQUOTE(JSON_EXTRACT(infoChar, '$.IsPremium')) AS IsPremium FROM `character` WHERE id = :account_id");
+    $stmt = $conn->prepare("SELECT id, name AS Name, gender AS Gender, 0 AS IsPremium, items_bag AS ItemBag FROM `player` WHERE account_id = :account_id");
     $stmt->bindParam(":account_id", $_id);
     $stmt->execute();
     $player_arr = $stmt->fetch(PDO::FETCH_ASSOC);

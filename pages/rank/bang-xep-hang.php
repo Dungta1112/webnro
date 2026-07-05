@@ -31,17 +31,15 @@ require_once '../../nduckien/head.php';
                 <tbody>
                     <?php
                     $countTop = 1;
-                    $query = "SELECT c.Name,
-            JSON_UNQUOTE(JSON_EXTRACT(c.infoChar, '$.Gender')) AS Gender,
-            CAST(JSON_UNQUOTE(JSON_EXTRACT(c.infoChar, '$.Power')) AS SIGNED) AS CharacterPower,
-            JSON_EXTRACT(c.infoChar, '$.IsHavePet') AS IsHavePet,
-            d.infoChar AS DiscipleInfoChar,
-            CAST(JSON_UNQUOTE(JSON_EXTRACT(d.infoChar, '$.Power')) AS SIGNED) AS DisciplePower,
-            CAST(JSON_UNQUOTE(JSON_EXTRACT(c.infoChar, '$.Power')) AS SIGNED) +
-            CAST(COALESCE(JSON_UNQUOTE(JSON_EXTRACT(d.infoChar, '$.Power')), '0') AS SIGNED) AS TotalPower
-          FROM `user` u
-          JOIN `character` c ON u.character = c.id
-          LEFT JOIN disciple d ON c.id = ABS(d.id)
+                    $query = "SELECT c.name AS Name,
+            c.gender AS Gender,
+            0 AS CharacterPower,
+            'false' AS IsHavePet,
+            NULL AS DiscipleInfoChar,
+            0 AS DisciplePower,
+            0 AS TotalPower
+          FROM `account` u
+          JOIN `player` c ON u.id = c.account_id
           ORDER BY TotalPower DESC
           LIMIT 10;";
 

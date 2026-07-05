@@ -38,7 +38,7 @@ require_once '../../nduckien/head.php';
                 12 => 'Tháng 12'
             );
 
-            $query = "SELECT player.`Name`, account.`tongnap`, player.`id` FROM `user` AS account CROSS JOIN `character` AS player ON account.`character` = player.id WHERE account.tongnap > 0 ORDER BY Cast(account.`tongnap` as Int) DESC LIMIT 10;";
+            $query = "SELECT player.`name` AS Name, account.`cash` AS tongnap, player.`id` FROM `account` AS account INNER JOIN `player` AS player ON account.`id` = player.account_id WHERE account.cash > 0 ORDER BY account.cash DESC LIMIT 10;";
 
             $stmt = $conn->prepare($query);
             $stmt->execute();

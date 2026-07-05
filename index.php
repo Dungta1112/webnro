@@ -40,12 +40,12 @@ require_once 'nduckien/head.php';
 
             </div>
             <?php
-            $query = "SELECT posts.*, JSON_EXTRACT(`character`.infoChar, '$.Gender') AS Gender, MAX(account.is_admin) AS admin, COUNT(comments.id) AS comment_count FROM posts
-        LEFT JOIN `character` ON posts.username = `character`.Name COLLATE utf8mb4_general_ci
-        LEFT JOIN account ON `character`.account_id = account.id
+            $query = "SELECT posts.*, player.gender AS Gender, MAX(account.is_admin) AS admin, COUNT(comments.id) AS comment_count FROM posts
+        LEFT JOIN `player` ON posts.username = `player`.name COLLATE utf8mb4_general_ci
+        LEFT JOIN account ON `player`.account_id = account.id
         LEFT JOIN comments ON posts.id = comments.post_id
-        WHERE posts.username = `character`.Name COLLATE utf8mb4_general_ci AND posts.ghimbai = 1 AND account.is_admin = 1
-            GROUP BY posts.id, posts.tieude, posts.tinhtrang, posts.username, `character`.infoChar ORDER BY posts.id DESC;";
+        WHERE posts.username = `player`.name COLLATE utf8mb4_general_ci AND posts.ghimbai = 1 AND account.is_admin = 1
+            GROUP BY posts.id, posts.tieude, posts.tinhtrang, posts.username, player.gender ORDER BY posts.id DESC;";
 
 
             $stmt = $conn->prepare($query);
@@ -102,10 +102,10 @@ require_once 'nduckien/head.php';
 
             // Tính toán giới hạn kết quả truy vấn theo biến $limit và $page
             $offset = ($page - 1) * $limit;
-            $query = "SELECT posts.*, JSON_EXTRACT(`character`.infoChar, '$.Gender') AS Gender, account.is_admin AS admin FROM posts
-      LEFT JOIN `character` ON posts.username = `character`.Name COLLATE utf8mb4_general_ci
-      LEFT JOIN account ON `character`.account_id = account.id
-      WHERE posts.username = `character`.Name COLLATE utf8mb4_general_ci
+            $query = "SELECT posts.*, player.gender AS Gender, account.is_admin AS admin FROM posts
+      LEFT JOIN `player` ON posts.username = `player`.name COLLATE utf8mb4_general_ci
+      LEFT JOIN account ON `player`.account_id = account.id
+      WHERE posts.username = `player`.name COLLATE utf8mb4_general_ci
       ORDER BY posts.id DESC LIMIT :limit OFFSET :offset";
 
             $stmt = $conn->prepare($query);
