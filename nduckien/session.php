@@ -127,7 +127,7 @@ function Callback($conn)
     }
 
     return [
-        "giatri" => $callback['giatri'],
+        "giatri" => isset($callback['giatri']) ? $callback['giatri'] : '',
     ];
 }
 
