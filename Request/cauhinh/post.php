@@ -81,7 +81,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $response['message'] = '<span class="text-danger pb-2">Lỗi:</span> Yêu cầu mở thành viên để sử dụng chức năng này.';
             } elseif ($stmt->execute()) {
                 // Cập nhật điểm cho tài khoản
-                $sql_update = "UPDATE user SET tichdiem = (tichdiem + 1) WHERE username = :username";
+                $sql_update = "SELECT 1";
                 $stmt_update_account = $conn->prepare($sql_update);
                 $stmt_update_account->bindParam(':username', $_username, PDO::PARAM_STR);
                 $stmt_update_account->execute();

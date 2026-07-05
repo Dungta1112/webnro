@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $response['message'] = 'Mật khẩu mới không giống nhau';
     } else {
         // Cập nhật mật khẩu mới
-        $stmt = $conn->prepare("UPDATE user SET password=:matKhauMoi WHERE username=:username");
+        $stmt = $conn->prepare("UPDATE account SET password=:matKhauMoi WHERE username=:username");
         $stmt->bindParam(":matKhauMoi", $matKhauMoi);
         $stmt->bindParam(":username", $_username);
 

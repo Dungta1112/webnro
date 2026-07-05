@@ -10,7 +10,7 @@ date_default_timezone_set('Asia/Ho_Chi_Minh');
 
 function fetchUserData($conn, $username)
 {
-    $stmt = $conn->prepare("SELECT * FROM user WHERE username = :username");
+    $stmt = $conn->prepare("SELECT * FROM account WHERE username = :username");
     $stmt->bindParam(":username", $username);
     $stmt->execute();
     $user_arr = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -26,23 +26,23 @@ function fetchUserData($conn, $username)
 
     $user_data = array_map('htmlspecialchars', $user_sanitized);
     return [
-        "_id" => $user_data['character'],
+        "_id" => $user_data['id'],
 		"_user_id" => $user_data['id'],
         "_username" => $user_data['username'],
         "_password" => $user_data['password'],
-        "_gmail" => $user_data['email'],
-        "_gioithieu" => $user_data['gioithieu'],
-        "_admin" => $user_data['admin'],
-        "_coin" => $user_data['vnd'],
-        "_tcoin" => $user_data['tongnap'],
-        "_status" => $user_data['active'],
-        "_tichdiem" => $user_data['tichdiem'],
-        "_xacminh" => $user_data['xacminh'],
-        "_thoigian_xacminh" => $user_data['thoigian_xacminh'],
-        "password2" => $user_data['mkc2'],
-        "gmail" => $user_data['email'],
-        "mocnap" => $user_data['mocnap'],
-        "coin" => $user_data['coin'],
+        "_gmail" => isset($user_data['email']) ? $user_data['email'] : '',
+        "_gioithieu" => '',
+        "_admin" => isset($user_data['is_admin']) ? $user_data['is_admin'] : 0,
+        "_coin" => isset($user_data['cash']) ? $user_data['cash'] : 0,
+        "_tcoin" => isset($user_data['danap']) ? $user_data['danap'] : 0,
+        "_status" => isset($user_data['active']) ? $user_data['active'] : 0,
+        "_tichdiem" => 0,
+        "_xacminh" => 0,
+        "_thoigian_xacminh" => '',
+        "password2" => '',
+        "gmail" => isset($user_data['email']) ? $user_data['email'] : '',
+        "mocnap" => isset($user_data['vip']) ? $user_data['vip'] : 0,
+        "coin" => isset($user_data['vang']) ? $user_data['vang'] : 0,
     ];
 }
 
@@ -315,18 +315,27 @@ function generateCaptcha($length = 6)
 
 function checkExistingUsername($conn, $username)
 {
-    $stmt = $conn->prepare("SELECT COUNT(*) FROM user WHERE username = :username");
-    $stmt->bindValue(':username', $username, PDO::PARAM_STR);
-    $stmt->execute();
-    return $stmt->fetchColumn() > 0;
+    try {
+        $stmt = $conn->prepare("SELECT COUNT(*) FROM account WHERE username = :username");
+        $stmt->bindValue(':username', $username, PDO::PARAM_STR);
+        $stmt->execute();
+        return $stmt->fetchColumn() > 0;
+    } catch (PDOException $e) {
+        return false;
+    }
 }
 
 function insertAccount($conn, $username, $password, $ip_address)
 {
-    $stmt = $conn->prepare("INSERT INTO user (username, password) VALUES (:username, :password)");
-    $stmt->bindValue(':username', $username, PDO::PARAM_STR);
-    $stmt->bindValue(':password', $password, PDO::PARAM_STR);
-    return $stmt->execute();
+    try {
+        // Also inserting email as empty string to prevent null issues if schema is strict
+        $stmt = $conn->prepare("INSERT INTO account (username, password, email) VALUES (:username, :password, '')");
+        $stmt->bindValue(':username', $username, PDO::PARAM_STR);
+        $stmt->bindValue(':password', $password, PDO::PARAM_STR);
+        return $stmt->execute();
+    } catch (PDOException $e) {
+        return false;
+    }
 }
 
 if (!isset($_POST["captcha"])) {

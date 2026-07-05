@@ -54,9 +54,8 @@ if (isset($jsonBody->callback_sign)) {
             if ($stmt->execute()) {
                 if ($jsonBody->status == 1) {
                     // Cập nhật cột "coin" và "vnd" trong bảng "account"
-                    $update_account_sql = "UPDATE user SET mocnap = mocnap + :tichdiem, vnd = vnd + :price, tongnap = tongnap + :price WHERE username = :user_nap";
+                    $update_account_sql = "UPDATE account SET cash = cash + :price WHERE username = :user_nap";
                     $stmt = $conn->prepare($update_account_sql);
-                    $stmt->bindParam(':tichdiem', $tichdiem);
                     $stmt->bindParam(':price', $price);
                     $stmt->bindParam(':user_nap', $user_nap);
                     $stmt->execute();

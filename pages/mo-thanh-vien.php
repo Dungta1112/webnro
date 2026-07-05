@@ -26,7 +26,7 @@ if ($_login === null) {
                             $coin = $_coin - 20000;
                             $stmt = $conn->prepare('UPDATE `charcter` SET infoChar = JSON_SET(infoChar, "$.IsPremium", "true") WHERE username = :username');
                             $stmt->bindValue(':username', $_name);
-                            $stmt = $conn->prepare('UPDATE user SET infoChar = JSON_SET(infoChar, "$.IsPremium", "true"), vnd = :coin WHERE username = :username');
+                            $stmt = $conn->prepare('UPDATE account SET active = 1, cash = :coin WHERE username = :username');
                             $stmt->bindValue(':coin', $coin);
                             $stmt->bindValue(':username', $_username);
                             if ($stmt->execute() && $stmt->rowCount() > 0) {

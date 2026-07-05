@@ -39,7 +39,7 @@ if ($_admin != 1) {
                     $vnd = intval($_POST["vnd"]);
 
                     // Kiểm tra xem có tài khoản nào khớp với tên đăng nhập không
-                    $sql_check = "SELECT * FROM user WHERE username = :username";
+                    $sql_check = "SELECT * FROM account WHERE username = :username";
                     $statement_check = $conn->prepare($sql_check);
                     $statement_check->bindParam(':username', $username, PDO::PARAM_STR);
                     $statement_check->execute();
@@ -52,7 +52,7 @@ if ($_admin != 1) {
                             $_alert = '<div class="alert alert-danger">Lỗi: Tài khoản đã bị vi phạm và không thể cộng tiền!</div>';
                         } else {
                             // Cập nhật tiền
-                            $sql_update = "UPDATE user SET vnd = vnd + :vnd WHERE username = :username";
+                            $sql_update = "UPDATE account SET cash = cash + :vnd WHERE username = :username";
                             $statement_update = $conn->prepare($sql_update);
                             $statement_update->bindParam(':vnd', $vnd, PDO::PARAM_INT);
                             $statement_update->bindParam(':username', $username, PDO::PARAM_STR);

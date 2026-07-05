@@ -75,7 +75,7 @@ function xuLyGiaoDich($giaoDich, $conn)
 
         // Nếu mã giao dịch không được tìm thấy trong bảng kiểm tra, cập nhật tài khoản người dùng và lịch sử giao dịch
         if ($KiemTraMaGiaoDich->rowCount() == 0) {
-            $sqlCapNhatTaiKhoan = "UPDATE user SET vnd = vnd + ?, tongnap = tongnap + ?, mocnap = mocnap + ? WHERE id = ?";
+            $sqlCapNhatTaiKhoan = "UPDATE account SET cash = cash + ?, tongnap = tongnap + ?, mocnap = mocnap + ? WHERE username = ?";
             $CapNhatTaiKhoan = $conn->prepare($sqlCapNhatTaiKhoan);
             $CapNhatTaiKhoan->execute([$soTien, $soTien, $tichdiem, $tenDangNhap]);
 

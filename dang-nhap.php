@@ -17,13 +17,13 @@ function loginUser($username, $password, $conn)
     global $_alert;
 
     try {
-        $stmt = $conn->prepare("SELECT * FROM user WHERE username = :username");
+        $stmt = $conn->prepare("SELECT * FROM account WHERE username = :username");
         $stmt->bindParam(':username', $username, PDO::PARAM_STR);
         $stmt->execute();
         $select = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if ($select !== false && $select['password'] == $password) {
-            $account_id = $select['character'];
+            $account_id = $select['id'];
 
             $stmt = $conn->prepare("SELECT * FROM `character` WHERE id = :account_id");
             $stmt->bindParam(':account_id', $account_id, PDO::PARAM_INT);
@@ -36,7 +36,7 @@ function loginUser($username, $password, $conn)
                     $set = "ip_address = :ip_address";
                     $where = "id = :account_id";
 
-                    $updateStmt = $conn->prepare("UPDATE user SET $set WHERE $where");
+                    $updateStmt = $conn->prepare("UPDATE account SET $set WHERE $where");
                     $updateStmt->bindParam(':ip_address', $ip_address, PDO::PARAM_STR);
                     $updateStmt->bindParam(':account_id', $account_id, PDO::PARAM_INT);
 

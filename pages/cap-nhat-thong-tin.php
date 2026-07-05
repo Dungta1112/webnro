@@ -16,7 +16,7 @@ if ($_login === null) {
     <div class="row pb-2 pt-2">
         <div class="col-lg-6">
             <?php
-            $query = "SELECT password, email FROM user WHERE username = :username";
+            $query = "SELECT password, email FROM account WHERE username = :username";
             $statement = $conn->prepare($query);
             $statement->bindParam(":username", $_username);
             $statement->execute();
@@ -47,7 +47,7 @@ if ($_login === null) {
                             echo "<div class='text-danger pb-2 font-weight-bold'>Vui lòng nhập địa chỉ email Gmail (ví dụ: example@gmail.com)</div>";
                         } else {
                             // Update the new Gmail in the database
-                            $updateQuery = "UPDATE user SET email = :newGmail WHERE username = :username";
+                            $updateQuery = "UPDATE account SET email = :newGmail WHERE username = :username";
                             $updateStatement = $conn->prepare($updateQuery);
                             $updateStatement->bindParam(":newGmail", $newGmail);
                             $updateStatement->bindParam(":username", $_username);
@@ -73,7 +73,7 @@ if ($_login === null) {
                             echo "<div class='text-danger pb-2 font-weight-bold'>Vui lòng nhập địa chỉ email Gmail (ví dụ: example@gmail.com)</div>";
                         } else {
                             // Update Gmail in the database
-                            $updateQuery = "UPDATE usser SET email = :newGmail WHERE username = :username";
+                            $updateQuery = "UPDATE account SET email = :newGmail WHERE username = :username";
                             $updateStatement = $conn->prepare($updateQuery);
                             $updateStatement->bindParam(":newGmail", $newGmail);
                             $updateStatement->bindParam(":username", $_username);

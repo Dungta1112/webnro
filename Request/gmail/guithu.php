@@ -30,7 +30,7 @@ function generateRandomCode($length = 32)
 $currentTimestamp = time();
 
 // Check if verification information exists in the database
-$stmt = $conn->prepare("SELECT xacminh, thoigian_xacminh FROM user WHERE username = :username");
+$stmt = $conn->prepare("SELECT 0 AS xacminh, 0 AS thoigian_xacminh FROM account WHERE username = :username");
 $stmt->bindParam(":username", $_username, PDO::PARAM_STR);
 $stmt->execute();
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -41,7 +41,7 @@ $thoigian_xacminh = $row['thoigian_xacminh'];
 
 if ($xacminh == 1 && $currentTimestamp > $thoigian_xacminh) {
     // Time has expired, update the 'xacminh' and 'thoigian_xacminh' columns to 0
-    $stmt = $conn->prepare("UPDATE user SET xacminh = 0, thoigian_xacminh = 0 WHERE username = :username");
+    $stmt = $conn->prepare("SELECT 1");
     $stmt->bindParam(":username", $_username, PDO::PARAM_STR);
     $stmt->execute();
     $stmt = null;
@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Update 'xacminh' and 'thoigian_xacminh' columns in the database
             $newXacminh = 1;
             $newThoigianXacminh = $currentTimestamp + 1800;
-            $stmt = $conn->prepare("UPDATE user SET xacminh = :xacminh, thoigian_xacminh = :thoigian_xacminh WHERE username = :username");
+            $stmt = $conn->prepare("SELECT 1");
             $stmt->bindParam(":xacminh", $newXacminh, PDO::PARAM_INT);
             $stmt->bindParam(":thoigian_xacminh", $newThoigianXacminh, PDO::PARAM_INT);
             $stmt->bindParam(":username", $_username, PDO::PARAM_STR);
@@ -70,7 +70,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         // Retrieve the verification time from the database
-        $stmt = $conn->prepare("SELECT thoigian_xacminh FROM user WHERE username = :username");
+        $stmt = $conn->prepare("SELECT 0 AS thoigian_xacminh FROM account WHERE username = :username");
         $stmt->bindParam(":username", $_username, PDO::PARAM_STR);
         $stmt->execute();
         $thoigian_xacminh = $stmt->fetchColumn();
@@ -83,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($remainingMinutes <= 0) {
             // Time has expired, update the 'xacminh' and 'thoigian_xacminh' columns to 0
-            $stmt = $conn->prepare("UPDATE user SET xacminh = 0, thoigian_xacminh = 0 WHERE username = :username");
+            $stmt = $conn->prepare("SELECT 1");
             $stmt->bindParam(":username", $_username, PDO::PARAM_STR);
             $stmt->execute();
             $stmt = null;

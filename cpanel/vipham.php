@@ -36,7 +36,7 @@ if ($_admin != 1) {
                 $_tinhtrang = $_POST['tinhtrang'];
 
                 // Truy vấn cơ sở dữ liệu để kiểm tra tài khoản
-                $query = "SELECT * FROM user WHERE username = :username";
+                $query = "SELECT * FROM account WHERE username = :username";
                 $statement = $conn->prepare($query);
                 $statement->bindParam(':username', $_username, PDO::PARAM_STR);
                 $statement->execute();
@@ -69,7 +69,7 @@ if ($_admin != 1) {
                         // Khóa tài khoản
                         if ($is_banned === '0') {
                             // Nếu tài khoản chưa bị khóa, tiến hành khóa tài khoản
-                            $query2 = "UPDATE user SET ban = '1' WHERE username = :username";
+                            $query2 = "UPDATE account SET ban = '1' WHERE username = :username";
                             $statement2 = $conn->prepare($query2);
                             $statement2->bindParam(':username', $_username, PDO::PARAM_STR);
                             if ($statement2->execute()) {

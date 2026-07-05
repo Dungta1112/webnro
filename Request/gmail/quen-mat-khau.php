@@ -26,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     try {
         // Kiểm tra tên người dùng và gmail trong cơ sở dữ liệu
-        $checkQuery = "SELECT gmail FROM user WHERE username = :username";
+        $checkQuery = "SELECT email AS gmail FROM account WHERE username = :username";
         $stmt = $conn->prepare($checkQuery);
         $stmt->bindValue(':username', $username, PDO::PARAM_STR);
         $stmt->execute();
@@ -38,7 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $newPassword = generateRandomPassword();
 
             // Cập nhật mật khẩu mới vào cơ sở dữ liệu
-            $updateQuery = "UPDATE user SET password = :newPassword WHERE username = :username";
+            $updateQuery = "UPDATE account SET password = :newPassword WHERE username = :username";
             $stmt = $conn->prepare($updateQuery);
             $stmt->bindValue(':newPassword', $newPassword, PDO::PARAM_STR);
             $stmt->bindValue(':username', $username, PDO::PARAM_STR);

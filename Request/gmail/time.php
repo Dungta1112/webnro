@@ -14,7 +14,7 @@ ob_flush();
 flush();
 
 // Prepare the SQL query
-$stmt = $conn->prepare("SELECT xacminh, thoigian_xacminh FROM user WHERE username = :username");
+$stmt = $conn->prepare("SELECT 0 AS xacminh, 0 AS thoigian_xacminh FROM account WHERE username = :username");
 $stmt->bindParam(":username", $_username, PDO::PARAM_STR);
 
 while (true) {
@@ -35,7 +35,7 @@ while (true) {
             echo "data: Thời gian xác minh đã hết\n\n";
 
             // Update the 'xacminh' column and 'thoigian_xacminh' column to reset
-            $updateStmt = $conn->prepare("UPDATE user SET xacminh = 0, thoigian_xacminh = 0 WHERE username = :username");
+            $updateStmt = $conn->prepare("SELECT 1");
             $updateStmt->bindParam(":username", $_username, PDO::PARAM_STR);
             $updateStmt->execute();
         } else {

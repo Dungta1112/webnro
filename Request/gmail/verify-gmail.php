@@ -19,7 +19,7 @@ function generateRandomCode($length = 32)
 
 function getuserDetails($username, $conn)
 {
-    $stmt = $conn->prepare("SELECT xacminh, thoigian_xacminh, gmail FROM user WHERE username = :username");
+    $stmt = $conn->prepare("SELECT 0 AS xacminh, 0 AS thoigian_xacminh, email AS gmail FROM account WHERE username = :username");
     $stmt->bindParam(":username", $username);
     $stmt->execute();
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -29,7 +29,7 @@ function getuserDetails($username, $conn)
 
 function updateuserVerificationStatus($username, $conn)
 {
-    $stmt = $conn->prepare("UPDATE user SET gmail = NULL, xacminh = 0, thoigian_xacminh = 0 WHERE username = :username");
+    $stmt = $conn->prepare("UPDATE account SET email = NULL WHERE username = :username");
     $stmt->bindParam(":username", $username);
     $stmt->execute();
     $stmt->closeCursor();

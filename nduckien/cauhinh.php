@@ -112,7 +112,7 @@ function updatePostStatus($conn, $post_id, $column, $value)
 
 
 if (date('d') === '01') {
-    $updateQuery = "UPDATE user SET mocnap = 0, moc_qua_1 = 0, moc_qua_2 = 0, moc_qua_3 = 0, moc_qua_4 = 0";
+    $updateQuery = "SELECT 1";
     $updateStmt = $conn->prepare($updateQuery);
     $updateStmt->execute();
 }

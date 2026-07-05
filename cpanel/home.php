@@ -14,14 +14,14 @@ $serverIP = $serverIP ?? '';
 $serverPort = $serverPort ?? '';
 
 // Đếm số lượng tài khoản trong cơ sở dữ liệu
-$id_user_query = "SELECT COUNT(id) AS id FROM user";
+$id_user_query = "SELECT COUNT(id) AS id FROM account";
 $id_statement = $conn->prepare($id_user_query);
 $id_statement->execute();
 $id = $id_statement->fetchColumn();
 
 // Đếm số lượng tài khoản bị cấm và số lượng tài khoản hoạt động
-$ban_count_query = "SELECT COUNT(*) AS ban FROM user WHERE ban = 1";
-$active_count_query = "SELECT COUNT(*) AS active FROM user WHERE active = 1";
+$ban_count_query = "SELECT COUNT(*) AS ban FROM account WHERE ban = 1";
+$active_count_query = "SELECT COUNT(*) AS active FROM account WHERE active = 1";
 
 $ban_statement = $conn->prepare($ban_count_query);
 $active_statement = $conn->prepare($active_count_query);
@@ -51,9 +51,9 @@ $_tongactive = $active_statement->fetchColumn();
                 <?php echo $_tongban; ?>
             </p>
             <?php
-            $sql = "SELECT c.id AS character_id, c.Name AS character_name, c.ItemBag, u.id AS user_id, u.vnd, u.coin
+            $sql = "SELECT c.id AS character_id, c.Name AS character_name, c.ItemBag, u.id AS user_id, u.cash AS vnd, u.vang AS coin
         FROM `character` AS c
-        LEFT JOIN user AS u ON c.id = u.character
+        LEFT JOIN account AS u ON c.account_id = u.id
         WHERE u.id IS NOT NULL";
             $stmt = $conn->prepare($sql);
             $stmt->execute();
